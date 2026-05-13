@@ -27,7 +27,10 @@ export default function NotFound() {
                 {/* 404 아이콘 및 숫자 */}
                 <div className="text-center">
                   <div className="mb-4 flex justify-center">
-                    <FileQuestion className="text-muted-foreground/40 h-24 w-24 sm:h-32 sm:w-32" />
+                    <FileQuestion
+                      className="text-muted-foreground/40 h-24 w-24 sm:h-32 sm:w-32"
+                      aria-hidden="true"
+                    />
                   </div>
                   <p className="text-muted-foreground/60 mb-2 text-8xl font-bold sm:text-9xl">
                     404

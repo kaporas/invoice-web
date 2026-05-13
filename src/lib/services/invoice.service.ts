@@ -239,8 +239,8 @@ export async function getInvoicesFromNotion(
     // Notion API 페이지 크기 제한 (최대 100)
     const limitedPageSize = Math.min(pageSize, 100)
 
-    // 정렬 속성 매핑
-    const sortProperty = sortBy === 'issue_date' ? '발행일' : '총 금액'
+    // 정렬 속성 매핑 (미지정 시 기본값은 발행일)
+    const sortProperty = sortBy === 'total_amount' ? '총금액' : '발행일'
     const sortDirection = 'descending' as const
 
     // v5에서는 data_source_id 필요
@@ -323,7 +323,7 @@ export async function searchInvoices(
             rich_text: { contains: filters.query },
           },
           {
-            property: '견적서 번호',
+            property: '견적서번호',
             title: { contains: filters.query },
           },
         ],

@@ -2,29 +2,17 @@
 
 ## 프로젝트 개요
 
-**노션 기반 견적서 관리 시스템 MVP** - 노션을 데이터베이스로 활용하여 견적서를 관리하고, 클라이언트가 웹에서 조회 및 PDF 다운로드
+**노션 기반 견적서 관리 시스템** - 노션을 데이터베이스로 활용하여 견적서를 관리하고, 클라이언트가 웹에서 조회 및 PDF 다운로드. 관리자 대시보드를 통해 목록 조회, 필터링, 링크 공유 기능 제공.
 
 ### 핵심 기술 스택
 
-- **프레임워크**: Next.js 15.5.3 (App Router + Turbopack)
-- **런타임**: React 19.1.0 + TypeScript 5
+- **프레임워크**: Next.js 15 (App Router + Turbopack)
+- **런타임**: React 19 + TypeScript 5
 - **스타일링**: TailwindCSS v4 + shadcn/ui (new-york)
 - **폼**: React Hook Form + Zod + Server Actions
-- **외부 API**: @notionhq/client (Notion API SDK)
-
-### MVP 범위
-
-**포함**:
-
-- 견적서 조회 페이지 (`/invoice/[id]`)
-- Notion API 연동
-- PDF 다운로드 기능
-
-**제외** (MVP 이후):
-
-- 관리자 대시보드
-- 이메일 발송
-- 템플릿 커스터마이징
+- **외부 API**: @notionhq/client v5 (Notion API SDK)
+- **인증**: jose (JWT) + httpOnly 쿠키
+- **PDF**: @react-pdf/renderer
 
 ---
 
@@ -34,26 +22,48 @@
 
 ```
 src/
-├── app/              # App Router 페이지만 배치
-│   ├── invoice/[id]/ # 동적 라우트
-│   └── layout.tsx    # 루트 레이아웃
-├── components/       # 컴포넌트 분류
-│   ├── ui/          # shadcn/ui 기본 컴포넌트
-│   ├── layout/      # 레이아웃 컴포넌트
-│   └── providers/   # Context 프로바이더
-└── lib/             # 유틸리티 및 설정
-    ├── utils.ts     # cn() 헬퍼
-    └── env.ts       # 환경변수 검증
+├── app/
+│   ├── (auth)/admin-login/   # 관리자 로그인 (URL: /admin-login)
+│   ├── admin/                # 관리자 대시보드 (/admin, /admin/invoices)
+│   ├── api/generate-pdf/     # PDF 생성 API Route
+│   ├── invoice/[id]/         # 공개 견적서 조회
+│   └── invoice/guide/        # 견적서 안내 페이지
+├── components/
+│   ├── admin/               # 관리자 전용 컴포넌트
+│   ├── invoice/             # 견적서 조회 컴포넌트
+│   ├── layout/              # 레이아웃 컴포넌트
+│   ├── pdf/                 # PDF 템플릿 컴포넌트
+│   ├── providers/           # Context 프로바이더
+│   └── ui/                  # shadcn/ui 기본 컴포넌트
+├── hooks/                   # 커스텀 훅 (use-clipboard.ts 등)
+├── lib/
+│   ├── auth/                # 인증 (session.ts, password.ts)
+│   ├── services/            # 비즈니스 로직 (invoice.service.ts)
+│   ├── utils/               # 유틸리티 (notion-parser.ts, link-generator.ts)
+│   ├── cache.ts             # 캐싱 레이어
+│   ├── constants.ts         # 에러 상수 등
+│   ├── env.ts               # 환경변수 Zod 검증
+│   ├── logger.ts            # 로거
+│   ├── notion.ts            # Notion 클라이언트 싱글턴
+│   ├── rate-limit.ts        # Rate Limiting
+│   └── utils.ts             # cn() 헬퍼
+├── middleware.ts             # 인증 + Rate Limiting
+└── types/                   # 도메인 타입
+    ├── auth.ts
+    ├── invoice.ts
+    ├── notion.ts
+    └── pdf.ts
 ```
 
 ### 경로 별칭 사용 필수
 
 ```typescript
-// ✅ 필수: 경로 별칭 사용
+// ✅ 필수
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { env } from '@/lib/env'
+import type { Invoice } from '@/types/invoice'
 
-// ❌ 금지: 상대 경로 사용
+// ❌ 금지
 import { Button } from '../../../components/ui/button'
 ```
 
@@ -61,45 +71,12 @@ import { Button } from '../../../components/ui/button'
 
 - **컴포넌트 파일**: kebab-case (`user-profile.tsx`)
 - **컴포넌트명**: PascalCase (`UserProfile`)
-- **폴더명**: kebab-case (`user-settings/`)
+- **폴더명**: kebab-case
 - **금지**: snake_case, PascalCase 폴더명
 
 ---
 
-## Next.js 15.5.3 필수 규칙
-
-### App Router 엄격 사용
-
-```typescript
-// ✅ 필수: App Router 구조
-app/
-├── layout.tsx
-├── page.tsx
-└── invoice/[id]/page.tsx
-
-// ❌ 절대 금지: Pages Router
-pages/
-├── index.tsx
-└── _app.tsx
-```
-
-### Server Components 우선 설계
-
-```typescript
-// ✅ 필수: 기본은 Server Component
-export default async function InvoicePage({ params }: InvoicePageProps) {
-  const { id } = await params  // async request API
-  const data = await getInvoice(id)
-  return <InvoiceView data={data} />
-}
-
-// ✅ 필수: 상호작용 필요 시에만 'use client'
-'use client'
-export function InteractiveButton() {
-  const [clicked, setClicked] = useState(false)
-  return <button onClick={() => setClicked(true)}>클릭</button>
-}
-```
+## Next.js 15 필수 규칙
 
 ### async request APIs 필수
 
@@ -114,8 +91,6 @@ export default async function Page({
 }) {
   const { id } = await params
   const query = await searchParams
-  const cookieStore = await cookies()
-  const headersList = await headers()
 }
 
 // ❌ 금지: 동기식 접근
@@ -124,381 +99,357 @@ export default function Page({ params }: { params: { id: string } }) {
 }
 ```
 
+### Server Components 우선
+
+```typescript
+// ✅ 기본: Server Component
+export default async function InvoicePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const invoice = await getOptimizedInvoice(id)
+  return <InvoiceView invoice={invoice} />
+}
+
+// ✅ 상호작용 필요 시에만 'use client'
+'use client'
+export function PDFDownloadButton({ invoice }: { invoice: Invoice }) {
+  const [loading, setLoading] = useState(false)
+  return <button onClick={() => handleDownload()}>PDF 다운로드</button>
+}
+```
+
 ### 금지 사항
 
 - Pages Router 사용 금지
 - `getServerSideProps`, `getStaticProps` 사용 금지
 - params/searchParams 동기 접근 금지
-- 'use client' 없이 useState, useEffect 사용 금지
+- `'use client'` 없이 useState, useEffect 사용 금지
 
 ---
 
-## 폼 처리 필수 패턴
+## 데이터 레이어 아키텍처
 
-### React Hook Form + Zod + Server Actions
+### 데이터 흐름 (엄수)
+
+```
+페이지 컴포넌트
+    ↓
+getOptimizedInvoice()         ← 외부 진입점 (항상 이것만 사용)
+    ↓
+getInvoiceWithDedup()         ← Request Deduplication (cache.ts)
+    ↓
+getCachedInvoiceFromNotion()  ← unstable_cache 60초 TTL (cache.ts)
+    ↓
+getInvoiceFromNotion()        ← Notion API 호출 + 재시도 (invoice.service.ts)
+```
+
+### 견적서 단건 조회
 
 ```typescript
-// 1. lib/schemas/invoice.ts - 스키마 정의
-import { z } from 'zod'
+// ✅ 필수: getOptimizedInvoice만 사용
+import { getOptimizedInvoice } from '@/lib/services/invoice.service'
 
-export const invoiceSchema = z.object({
-  clientName: z.string().min(1, '클라이언트명 필수'),
-  amount: z.number().positive('금액은 양수'),
+const invoice = await getOptimizedInvoice(pageId)
+
+// ❌ 금지: 직접 Notion 호출
+import { notion } from '@/lib/notion'
+const page = await notion.pages.retrieve({ page_id: id }) // 캐싱 우회
+```
+
+### 견적서 목록/검색 조회
+
+```typescript
+// 목록 조회 (v5 API - dataSources.query 사용)
+import {
+  getInvoicesFromNotion,
+  searchInvoices,
+} from '@/lib/services/invoice.service'
+
+const result = await getInvoicesFromNotion(10, cursor, 'issue_date')
+const result = await searchInvoices({ query: '홍길동', status: 'pending' }, 10)
+```
+
+### Notion API v5 중요 규칙
+
+- **목록 조회**: `notion.dataSources.query()` 사용 (`data_source_id` 필요)
+- **data_source_id 획득**: `getDataSourceId()` 호출 (notion.ts, 자동 캐싱)
+- **단건 조회**: `notion.pages.retrieve()` 사용 (그대로)
+- `databases.query`는 v5에서 사용 불가 → `dataSources.query` 사용
+
+```typescript
+// ✅ v5 목록 조회
+const dataSourceId = await getDataSourceId()
+const response = await notion.dataSources.query({
+  data_source_id: dataSourceId,
+  page_size: 10,
+  sorts: [{ property: '발행일', direction: 'descending' }],
 })
 
-export type InvoiceFormData = z.infer<typeof invoiceSchema>
-
-// 2. app/actions/invoice.ts - Server Action
-'use server'
-
-export async function submitInvoiceAction(
-  prevState: ActionResult,
-  formData: FormData
-): Promise<ActionResult> {
-  // 서버 사이드 검증 필수
-  const validated = invoiceSchema.safeParse({
-    clientName: formData.get('clientName'),
-    amount: Number(formData.get('amount')),
-  })
-
-  if (!validated.success) {
-    return {
-      success: false,
-      message: '입력 오류',
-      errors: validated.error.flatten().fieldErrors,
-    }
-  }
-
-  // 비즈니스 로직
-  await saveInvoice(validated.data)
-  return { success: true, message: '저장 완료' }
-}
-
-// 3. components/invoice-form.tsx - 폼 컴포넌트
-'use client'
-
-import { useActionState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-
-export function InvoiceForm() {
-  const [state, formAction, isPending] = useActionState(submitInvoiceAction, {
-    success: false,
-    message: '',
-  })
-
-  const form = useForm<InvoiceFormData>({
-    resolver: zodResolver(invoiceSchema),
-    mode: 'onChange',
-  })
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(data => {
-        const formData = new FormData()
-        Object.entries(data).forEach(([key, value]) => {
-          formData.append(key, String(value))
-        })
-        formAction(formData)
-      })}>
-        {/* 폼 필드 */}
-      </form>
-    </Form>
-  )
-}
+// ❌ v5에서 동작 안 함
+await notion.databases.query({ database_id: env.NOTION_DATABASE_ID })
 ```
 
-### 필수 규칙
+### Notion DB 속성명 (한국어 그대로 사용)
 
-- Zod 스키마로 타입 정의
-- 서버-클라이언트 이중 검증 필수
-- Server Actions에서 스키마 검증 수행
-- `useActionState`로 서버 상태 관리
+| DB       | 속성명         | 타입                          |
+| -------- | -------------- | ----------------------------- |
+| Invoices | `견적서 번호`  | Title                         |
+| Invoices | `클라이언트명` | Text                          |
+| Invoices | `발행일`       | Date                          |
+| Invoices | `유효기간`     | Date                          |
+| Invoices | `상태`         | Select (`대기`/`승인`/`거절`) |
+| Invoices | `총 금액`      | Number                        |
+| Invoices | `항목`         | Relation → Items              |
+| Items    | `항목명`       | Title                         |
+| Items    | `수량`         | Number                        |
+| Items    | `단가`         | Number                        |
+| Items    | `금액`         | Formula                       |
 
----
-
-## 스타일링 규칙
-
-### TailwindCSS v4 유틸리티 클래스 우선
+### 타입 가드 사용
 
 ```typescript
-// ✅ 필수: Tailwind 유틸리티 클래스
-<div className="flex items-center justify-between rounded-lg bg-background p-4">
-  <h2 className="text-lg font-semibold text-foreground">제목</h2>
-</div>
+// ✅ 필수: Notion 응답 검증 시 타입 가드 사용
+import { isInvoicePage, isItemPage } from '@/types/notion'
 
-// ❌ 금지: 인라인 스타일
-<div style={{ display: 'flex', padding: '16px' }}>
-  <h2 style={{ fontSize: '18px' }}>제목</h2>
-</div>
+const page = response as NotionPage
+if (!isInvoicePage(page)) throw new Error(ERROR_MESSAGES.INVALID_INVOICE_DATA)
+
+// ❌ 금지: 타입 단언만으로 검증 없이 사용
+const page = response as InvoicePageProperties
 ```
-
-### shadcn/ui 컴포넌트 활용
-
-```bash
-# 새 컴포넌트 추가
-npx shadcn@latest add button
-npx shadcn@latest add card
-```
-
-```typescript
-// ✅ 필수: shadcn/ui 컴포넌트 사용
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-
-<Card>
-  <Button variant="outline">버튼</Button>
-</Card>
-```
-
-### cn() 함수로 클래스 조합
-
-```typescript
-import { cn } from '@/lib/utils'
-
-// ✅ 필수: cn() 함수 사용
-<div className={cn(
-  "base-classes",
-  isActive && "active-classes",
-  className
-)}>
-
-// ❌ 금지: 문자열 직접 조합
-<div className={`base ${isActive ? 'active' : ''} ${className}`}>
-```
-
-### 시맨틱 색상 변수 (다크모드 대응)
-
-```typescript
-// ✅ 필수: CSS 변수 기반 시맨틱 색상
-<div className="bg-background text-foreground">
-  <h1 className="text-primary">제목</h1>
-  <p className="text-muted-foreground">설명</p>
-</div>
-
-// ❌ 금지: 하드코딩된 색상
-<div className="bg-white text-black dark:bg-black dark:text-white">
-  <h1 className="text-blue-600">제목</h1>
-</div>
-```
-
-### 금지 사항
-
-- 인라인 스타일 (`style={{}}`) 금지
-- 하드코딩된 색상 클래스 금지 (`bg-white`, `text-black`)
-- 커스텀 CSS 클래스 최소화
-- `!important` 남용 금지
-
----
-
-## 컴포넌트 작성 규칙
-
-### Server Component 기본, 'use client' 최소화
-
-```typescript
-// ✅ Server Component (기본)
-export default async function InvoiceList() {
-  const invoices = await getInvoices()
-  return <div>{invoices.map(...)}</div>
-}
-
-// ✅ Client Component (상호작용 필요시에만)
-'use client'
-export function SearchForm() {
-  const [query, setQuery] = useState('')
-  return <input value={query} onChange={e => setQuery(e.target.value)} />
-}
-```
-
-### 단일 책임 원칙
-
-```typescript
-// ✅ 각 컴포넌트가 하나의 명확한 책임
-export function UserAvatar({ user }: { user: User }) {
-  return <Avatar><AvatarImage src={user.avatar} /></Avatar>
-}
-
-export function UserStatus({ isOnline }: { isOnline: boolean }) {
-  return <div className={cn("h-3 w-3 rounded-full", isOnline ? "bg-green-500" : "bg-gray-400")} />
-}
-
-// ❌ 여러 책임이 섞인 컴포넌트
-export function UserCard({ user }) {
-  // 아바타 + 상태 + 프로필 + 통계... (너무 많은 책임)
-}
-```
-
-### Props 인터페이스 정의 필수
-
-```typescript
-// ✅ 필수: 명확한 Props 타입
-interface ButtonProps {
-  children: React.ReactNode
-  variant?: 'default' | 'destructive' | 'outline'
-  size?: 'default' | 'sm' | 'lg'
-  disabled?: boolean
-  onClick?: () => void
-  className?: string
-}
-
-export function Button({ children, variant = 'default', ...props }: ButtonProps) {
-  return <button className={cn(buttonVariants({ variant }))} {...props}>{children}</button>
-}
-
-// ❌ Props 타입 없음
-export function Button(props) {
-  return <button {...props} />
-}
-```
-
-### 파일 크기 제한
-
-- 단일 파일: 300줄 이하 권장
-- 300줄 초과 시 분할 필수
 
 ---
 
 ## 환경 변수 관리
 
-### lib/env.ts에서 Zod 검증 필수
+### env.ts Zod 검증 필수
 
 ```typescript
-// lib/env.ts
-import { z } from 'zod'
-
+// 새 환경변수 추가 시 반드시 env.ts의 envSchema와 env 객체 모두 수정
 const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production', 'test']),
-  NOTION_API_KEY: z.string().min(1, 'NOTION_API_KEY 필수'),
-  NOTION_DATABASE_ID: z.string().min(1, 'NOTION_DATABASE_ID 필수'),
-})
-
-export const env = envSchema.parse({
-  NODE_ENV: process.env.NODE_ENV,
-  NOTION_API_KEY: process.env.NOTION_API_KEY,
-  NOTION_DATABASE_ID: process.env.NOTION_DATABASE_ID,
+  NOTION_API_KEY: z
+    .string()
+    .refine(k => k.startsWith('secret_') || k.startsWith('ntn_')),
+  NOTION_DATABASE_ID: z.string().length(32),
+  ADMIN_PASSWORD: z.string().min(8),
+  SESSION_SECRET: z.string().length(32), // 정확히 32자 필수
+  NEXT_PUBLIC_BASE_URL: z.string().url().default('http://localhost:3000'),
 })
 ```
 
-### 환경 변수 추가 시 필수 작업
+### 환경변수 접근 규칙
 
-1. `.env.local` 또는 `.env.example`에 변수 추가
-2. `lib/env.ts`의 `envSchema`에 검증 규칙 추가
-3. `env` 객체 파싱에 변수 추가
+```typescript
+// ✅ 필수: env 객체 사용
+import { env } from '@/lib/env'
+const key = env.NOTION_API_KEY
+
+// ❌ 금지: 컴포넌트/서비스에서 process.env 직접 접근
+const key = process.env.NOTION_API_KEY // middleware.ts만 예외 (Edge Runtime)
+```
 
 ---
 
-## Notion API 통합 규칙
+## 인증 시스템
 
-### Notion 클라이언트 초기화
+### 흐름
 
-```typescript
-// lib/notion.ts
-import { Client } from '@notionhq/client'
-import { env } from './env'
-
-export const notion = new Client({
-  auth: env.NOTION_API_KEY,
-})
+```
+/admin-login → actions.ts → password.ts 비교 → session.ts JWT 생성 → admin_session 쿠키
+middleware.ts → /admin/* 경로에서 JWT 검증 → 실패 시 /admin-login redirect
 ```
 
-### 견적서 조회 구조
+### 세션 관리
 
 ```typescript
-// app/invoice/[id]/page.tsx
-import { notion } from '@/lib/notion'
-import { notFound } from 'next/navigation'
+// ✅ 세션 생성 (로그인 성공 시)
+import { createSession, getSession, deleteSession } from '@/lib/auth/session'
+await createSession() // JWT 생성 + admin_session 쿠키 설정
+const session = await getSession() // 세션 검증 및 조회
+await deleteSession() // 로그아웃
 
-export default async function InvoicePage({ params }: InvoicePageProps) {
-  const { id } = await params
+// ✅ 비밀번호 검증
+import { verifyPassword } from '@/lib/auth/password'
+const isValid = verifyPassword(inputPassword) // ADMIN_PASSWORD와 비교
+```
 
-  try {
-    // Notion 페이지 조회
-    const page = await notion.pages.retrieve({ page_id: id })
-    const blocks = await notion.blocks.children.list({ block_id: id })
+### middleware.ts 규칙
 
-    return <InvoiceView page={page} blocks={blocks} />
-  } catch (error) {
-    notFound()
+- `/admin/*`: JWT 검증 → 실패 시 `/admin-login` redirect
+- `/api/*`: Rate Limiting (분당 10회, in-memory)
+- Edge Runtime 제약으로 `env.ts` 대신 `process.env.SESSION_SECRET` 직접 사용 (유일한 예외)
+- Vercel 서버리스: 인스턴스 재시작 시 Rate Limit 카운터 초기화됨
+
+---
+
+## 로깅 규칙
+
+```typescript
+// ✅ 필수: logger 사용
+import { logger } from '@/lib/logger'
+
+logger.info('견적서 조회 성공', { pageId, invoiceNumber })
+logger.warn('API 재시도', { attempt: 1, delayMs: 1000 })
+logger.error('Notion API 오류', { pageId, errorCode }, error)
+
+// ❌ 금지: console.log 사용
+console.log('견적서 조회')
+```
+
+- 민감 키워드(`apiKey`, `password`, `token`, `secret`)는 자동으로 `[REDACTED]`로 마스킹됨
+- 개발: 가독성 포맷, 프로덕션: JSON 포맷
+
+---
+
+## 에러 처리 규칙
+
+### ERROR_MESSAGES 상수 사용
+
+```typescript
+// ✅ 필수: constants.ts의 ERROR_MESSAGES 사용
+import { ERROR_MESSAGES } from '@/lib/constants'
+throw new Error(ERROR_MESSAGES.INVOICE_NOT_FOUND)
+throw new Error(ERROR_MESSAGES.INVALID_INVOICE_DATA)
+
+// ❌ 금지: 하드코딩된 에러 메시지
+throw new Error('견적서를 찾을 수 없습니다')
+```
+
+### Notion API 에러 처리
+
+```typescript
+try {
+  const page = await notion.pages.retrieve({ page_id: pageId })
+} catch (error) {
+  const errorObj = error as { code?: string }
+  if (errorObj.code === 'object_not_found') {
+    throw new Error(ERROR_MESSAGES.INVOICE_NOT_FOUND) // → notFound() 트리거
   }
+  throw new Error(ERROR_MESSAGES.NOTION_API_ERROR)
 }
 ```
 
-### 에러 처리 필수
+- 404 에러 → `notFound()` 호출 (not-found.tsx 렌더링)
+- 500 에러 → `error.tsx`로 처리
+- 재시도 가능 에러: `withRetry()` (invoice.service.ts 내부 사용, 3회, 지수 백오프)
 
-- Notion API 호출 시 try-catch 필수
-- 404 에러는 `notFound()` 호출
-- 500 에러는 `error.tsx`로 처리
+---
+
+## 스타일링 규칙
+
+### Tailwind + shadcn/ui
+
+```typescript
+// ✅ 필수: 시맨틱 색상 변수
+<div className="bg-background text-foreground">
+  <p className="text-muted-foreground">설명</p>
+</div>
+
+// ❌ 금지: 하드코딩 색상
+<div className="bg-white text-black">
+
+// ✅ 조건부 클래스: cn() 사용
+import { cn } from '@/lib/utils'
+<div className={cn('base', isActive && 'active', className)}>
+
+// ❌ 금지: 인라인 스타일, 문자열 직접 조합
+<div style={{ display: 'flex' }}>
+```
+
+### shadcn/ui 컴포넌트 추가
+
+```bash
+npx shadcn@latest add [component]  # 새 컴포넌트 추가
+```
+
+---
+
+## 폼 처리 규칙
+
+### React Hook Form + Zod + Server Actions
+
+```typescript
+// Server Action
+'use server'
+export async function loginAction(
+  prevState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
+  const validated = loginSchema.safeParse({
+    password: formData.get('password'),
+  })
+  if (!validated.success) return { success: false, message: '입력 오류' }
+  // 비즈니스 로직
+}
+
+// Client 폼 컴포넌트
+;('use client')
+const [state, formAction, isPending] = useActionState(loginAction, {
+  success: false,
+  message: '',
+})
+```
+
+- Zod 스키마로 타입 정의
+- 서버-클라이언트 이중 검증 필수
+- `useActionState`로 서버 상태 관리
 
 ---
 
 ## 다중 파일 조정 규칙
 
-### 새 페이지 추가 시
+### 새 환경변수 추가
 
-1. `src/app/[route]/page.tsx` 생성
-2. 필요 시 `layout.tsx`, `loading.tsx`, `error.tsx` 추가
-3. Server Component로 시작, 필요 시 Client Component 분리
+1. `.env.local` 변수 추가
+2. `.env.local.example` 변수 추가
+3. `src/lib/env.ts`의 `envSchema`와 `env` 파싱 객체 수정
 
-### Notion API 연동 시
+### 새 에러 메시지 추가
 
-1. `lib/env.ts`: 환경 변수 추가
-2. `lib/notion.ts`: Notion 클라이언트 생성 (없으면 생성)
-3. `app/invoice/[id]/page.tsx`: API 호출 로직
-4. `.env.local`: 실제 API 키 설정
+1. `src/lib/constants.ts`의 `ERROR_MESSAGES`에 추가
+2. 서비스/컴포넌트에서 상수 import하여 사용
 
-### 새 폼 추가 시
+### 새 페이지 추가
 
-1. `lib/schemas/[form-name].ts`: Zod 스키마 정의
-2. `app/actions/[action-name].ts`: Server Action 생성
-3. `components/[form-name]-form.tsx`: 폼 컴포넌트 ('use client')
+1. `src/app/[route]/page.tsx` 생성 (Server Component 우선)
+2. 필요 시 `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx` 추가
+3. 관리자 페이지: `src/app/admin/` 하위, 인증은 middleware가 자동 처리
+
+### 새 Notion API 기능 추가
+
+1. `src/types/notion.ts`: 필요 시 타입 추가
+2. `src/lib/services/invoice.service.ts`: 서비스 함수 추가
+3. `src/lib/cache.ts`: 캐싱 필요 시 래퍼 함수 추가
+4. 페이지 컴포넌트: 서비스 함수만 호출
+
+### 새 관리자 컴포넌트 추가
+
+1. `src/components/admin/[component-name].tsx` 생성
+2. 서버 컴포넌트 우선, 상호작용 필요 시 Client Component 분리
 
 ---
 
 ## 금지사항
 
-### 절대 금지 (엄격)
+### 절대 금지
 
-- **Pages Router 사용 금지** - App Router만 사용
-- **getServerSideProps/getStaticProps 사용 금지** - Server Component 사용
-- **params/searchParams 동기 접근 금지** - 반드시 await
-- **인라인 스타일 금지** - Tailwind 클래스만 사용
-- **하드코딩된 색상 금지** - 시맨틱 색상 변수 사용
-- **클라이언트에서 환경 변수 직접 접근 금지** - env 객체 사용
+- **Pages Router 사용** - App Router만 사용
+- **getServerSideProps/getStaticProps** - Server Component 사용
+- **params/searchParams 동기 접근** - 반드시 await
+- **인라인 스타일** - Tailwind 클래스만 사용
+- **하드코딩된 색상** - 시맨틱 색상 변수 사용
+- **process.env 직접 접근** - `env` 객체 사용 (middleware.ts 제외)
+- **상대 경로 import** - `@/` 별칭 사용
+- **notion.ts 직접 호출로 단건 조회** - `getOptimizedInvoice()` 사용
+- **databases.query 사용** - Notion API v5에서 `dataSources.query` 사용
+- **console.log** - `logger` 사용
+- **하드코딩된 에러 메시지** - `ERROR_MESSAGES` 상수 사용
 
-### 지양 사항 (권장)
+### 지양 사항
 
-- 'use client' 남용 지양 - Server Component 우선
-- 커스텀 CSS 클래스 지양 - Tailwind 우선
-- 깊은 props drilling 지양 - Context 사용
-- 거대한 컴포넌트 지양 - 300줄 이하 유지
-
----
-
-## 코드 품질 체크리스트
-
-### 개발 완료 후 필수 실행
-
-```bash
-npm run check-all   # 타입 체크 + 린트 + 포맷 검사
-npm run build       # 빌드 테스트
-```
-
-### 컴포넌트 작성 후 확인
-
-- [ ] Server/Client Component 적절히 분리
-- [ ] Props 인터페이스 정의
-- [ ] Tailwind 클래스 사용
-- [ ] 시맨틱 색상 변수 사용
-- [ ] 파일 크기 300줄 이하
-- [ ] 단일 책임 원칙 준수
-
-### 폼 작성 후 확인
-
-- [ ] Zod 스키마 정의
-- [ ] Server Action 생성
-- [ ] 서버-클라이언트 이중 검증
-- [ ] useActionState 사용
-- [ ] 에러 메시지 한국어
+- 'use client' 남용 - Server Component 우선
+- 커스텀 CSS 클래스 - Tailwind 우선
+- 깊은 props drilling - Context 사용
+- 단일 파일 300줄 초과 - 분할 권장
 
 ---
 
@@ -506,32 +457,50 @@ npm run build       # 빌드 테스트
 
 ### 새 기능 구현 시
 
-1. **Server Component로 시작 가능?**
+1. **인증 필요?**
+   - YES → `/admin/` 하위 배치 (middleware 자동 보호)
+   - NO → `/invoice/` 또는 공개 라우트
+
+2. **Notion 데이터 필요?**
+   - 단건 → `getOptimizedInvoice(pageId)`
+   - 목록/검색 → `getInvoicesFromNotion()` / `searchInvoices()`
+
+3. **Server Component로 가능?**
    - YES → Server Component 사용
-   - NO (상호작용 필요) → 'use client' 사용
+   - NO (onClick, useState 등) → `'use client'` + 최소 범위
 
-2. **폼 처리 필요?**
-   - YES → React Hook Form + Zod + Server Actions 패턴 사용
-   - NO → 일반 컴포넌트
-
-3. **스타일링 필요?**
-   - 기본 UI → shadcn/ui 컴포넌트 사용
-   - 커스텀 스타일 → Tailwind 유틸리티 클래스
-   - 조건부 스타일 → cn() 함수
-
-4. **데이터 패칭 필요?**
-   - Notion 데이터 → lib/notion.ts 사용
-   - 기타 → Server Component에서 직접 fetch
+4. **에러 처리?**
+   - 404 → `notFound()` 호출
+   - 기타 → `error.tsx`가 자동 처리, `logger.error()` 로깅
 
 ### 파일 수정 시
 
-1. **기존 파일 읽기 필수** - 수정 전 반드시 파일 읽기
-2. **패턴 일치 확인** - 기존 코드 스타일 유지
-3. **타입 정의 확인** - Props 인터페이스 존재 여부 확인
-4. **Import 경로 확인** - 경로 별칭 사용 여부 확인
+1. 수정 전 반드시 파일 읽기
+2. 기존 코드 스타일 유지
+3. 환경변수 추가 시 env.ts도 반드시 수정
+4. Notion 속성명은 한국어 그대로 사용
 
 ---
 
-**📝 문서 버전**: v1.0
-**📅 작성일**: 2025-10-05
-**🎯 목표**: AI Agent가 즉시 실행 가능한 프로젝트별 규칙 제공
+## 코드 품질 체크리스트
+
+```bash
+npm run check-all   # 타입 체크 + 린트 + 포맷 검사 (커밋 전 필수)
+npm run build       # 빌드 테스트
+```
+
+### 컴포넌트 작성 후 확인
+
+- [ ] Server/Client Component 적절히 분리
+- [ ] Props 인터페이스 정의
+- [ ] Tailwind 클래스 + 시맨틱 색상 사용
+- [ ] `@/` 경로 별칭 사용
+- [ ] 파일 300줄 이하
+
+### Notion 서비스 작성 후 확인
+
+- [ ] `getOptimizedInvoice()` 경유 (단건 조회)
+- [ ] `dataSources.query` 사용 (목록 조회)
+- [ ] `logger` 로깅
+- [ ] `ERROR_MESSAGES` 상수 사용
+- [ ] 타입 가드 (`isInvoicePage`, `isItemPage`) 적용

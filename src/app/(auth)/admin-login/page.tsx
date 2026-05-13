@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { loginAction } from './actions'
 import { toast } from 'sonner'
-import { Lock } from 'lucide-react'
+import { Lock, Loader2 } from 'lucide-react'
 
 /**
  * 로그인 페이지 컴포넌트
@@ -66,7 +66,11 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
+              <label htmlFor="password" className="sr-only">
+                비밀번호
+              </label>
               <Input
+                id="password"
                 type="password"
                 name="password"
                 placeholder="비밀번호"
@@ -78,6 +82,7 @@ export default function LoginPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {loading ? '로그인 중...' : '로그인'}
             </Button>
           </form>

@@ -67,7 +67,7 @@ function SortButton({
  */
 export function InvoiceTable({ invoices, currentSort }: InvoiceTableProps) {
   return (
-    <div className="rounded-md border">
+    <div className="overflow-x-auto rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>
@@ -90,6 +90,16 @@ export function InvoiceTable({ invoices, currentSort }: InvoiceTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {invoices.length === 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={8}
+                className="text-muted-foreground py-12 text-center"
+              >
+                견적서가 없습니다.
+              </TableCell>
+            </TableRow>
+          )}
           {invoices.map(invoice => (
             <TableRow key={invoice.id}>
               <TableCell className="font-medium">

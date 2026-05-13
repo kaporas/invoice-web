@@ -6,6 +6,7 @@ import { InvoiceSummary } from '@/components/invoice/InvoiceSummary'
 import { PDFDownloadButton } from '@/components/invoice/PDFDownloadButton'
 import { InvoiceSkeleton } from '@/components/invoice/InvoiceSkeleton'
 import { getOptimizedInvoice } from '@/lib/services/invoice.service'
+import { logger } from '@/lib/logger'
 import { notFound } from 'next/navigation'
 import { Separator } from '@/components/ui/separator'
 import { Suspense } from 'react'
@@ -59,7 +60,7 @@ async function InvoiceContent({ id }: { id: string }) {
   try {
     invoiceData = await getOptimizedInvoice(id)
   } catch (error) {
-    console.error('견적서 조회 실패:', error)
+    logger.error('견적서 조회 실패', { id }, error as Error)
     // 에러 발생 시 404 페이지로 리다이렉트
     notFound()
   }

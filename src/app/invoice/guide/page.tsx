@@ -22,28 +22,30 @@ export default function GuidePage() {
                   견적서 조회 방법
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h3 className="mb-2 font-semibold">1. 견적서 링크 받기</h3>
-                  <p className="text-muted-foreground text-sm">
-                    발행자로부터 이메일이나 메신저를 통해 견적서 고유 링크를
-                    받습니다.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="mb-2 font-semibold">2. 견적서 확인</h3>
-                  <p className="text-muted-foreground text-sm">
-                    링크를 클릭하면 견적서 내용을 웹에서 바로 확인할 수
-                    있습니다.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="mb-2 font-semibold">3. PDF 다운로드</h3>
-                  <p className="text-muted-foreground text-sm">
-                    견적서 페이지에서 &apos;PDF 다운로드&apos; 버튼을 클릭하여
-                    파일로 저장하거나 인쇄할 수 있습니다.
-                  </p>
-                </div>
+              <CardContent>
+                <ol className="space-y-4">
+                  <li>
+                    <h3 className="mb-2 font-semibold">1. 견적서 링크 받기</h3>
+                    <p className="text-muted-foreground text-sm">
+                      발행자로부터 이메일이나 메신저를 통해 견적서 고유 링크를
+                      받습니다.
+                    </p>
+                  </li>
+                  <li>
+                    <h3 className="mb-2 font-semibold">2. 견적서 확인</h3>
+                    <p className="text-muted-foreground text-sm">
+                      링크를 클릭하면 견적서 내용을 웹에서 바로 확인할 수
+                      있습니다.
+                    </p>
+                  </li>
+                  <li>
+                    <h3 className="mb-2 font-semibold">3. PDF 다운로드</h3>
+                    <p className="text-muted-foreground text-sm">
+                      견적서 페이지에서 &apos;PDF 다운로드&apos; 버튼을 클릭하여
+                      파일로 저장하거나 인쇄할 수 있습니다.
+                    </p>
+                  </li>
+                </ol>
               </CardContent>
             </Card>
 

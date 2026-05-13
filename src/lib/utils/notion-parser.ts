@@ -25,14 +25,14 @@ export function transformNotionToInvoice(
 
   // null 체크와 기본값 처리
   const invoiceNumber =
-    extractPlainText(props['견적서 번호']?.title) || 'INV-UNKNOWN'
+    extractPlainText(props['견적서번호']?.title) || 'INV-UNKNOWN'
   const clientName = extractPlainText(props.클라이언트명?.rich_text) || '미지정'
   const issueDate =
     props.발행일?.date?.start || new Date().toISOString().split('T')[0]
   const validUntil =
     props.유효기간?.date?.start || getDefaultValidUntil(issueDate)
   const totalAmount =
-    props['총 금액']?.number || calculateTotalFromItems(itemPages)
+    props['총금액']?.number || calculateTotalFromItems(itemPages)
   const status = mapKoreanStatus(props.상태?.select?.name)
 
   // 항목 변환

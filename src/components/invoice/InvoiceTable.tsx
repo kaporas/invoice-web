@@ -78,14 +78,8 @@ export function InvoiceTable({ items, className }: InvoiceTableProps) {
 
         {/* 모바일 카드 뷰 */}
         <div className="space-y-4 p-6 md:hidden">
-          {items.map((item, index) => (
-            <div
-              key={item.id}
-              className={cn(
-                'space-y-2 rounded-lg border p-4',
-                index !== items.length - 1 && 'border-b'
-              )}
-            >
+          {items.map(item => (
+            <div key={item.id} className="space-y-2 rounded-lg border p-4">
               <div className="text-foreground font-semibold">
                 {item.description}
               </div>

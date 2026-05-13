@@ -3,6 +3,7 @@
  * Server Component
  */
 
+import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { FileText, Users, Clock } from 'lucide-react'
 
@@ -22,17 +23,19 @@ export default function AdminPage() {
 
       {/* 주요 기능 카드 */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">견적서 관리</CardTitle>
-            <FileText className="text-muted-foreground h-4 w-4" />
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground text-sm">
-              발행한 모든 견적서를 확인하고 관리할 수 있습니다.
-            </p>
-          </CardContent>
-        </Card>
+        <Link href="/admin/invoices" className="block">
+          <Card className="hover:bg-muted/50 transition-colors">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">견적서 관리</CardTitle>
+              <FileText className="text-muted-foreground h-4 w-4" />
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground text-sm">
+                발행한 모든 견적서를 확인하고 관리할 수 있습니다.
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -15,13 +15,13 @@ export default function InvoiceLoading() {
       <main className="bg-muted/30 flex-1">
         <div className="container mx-auto px-4 py-8 sm:py-12">
           {/* 페이지 타이틀 스켈레톤 */}
-          <div className="mb-6 space-y-2">
+          <div className="mx-auto mb-6 max-w-3xl space-y-2">
             <Skeleton className="h-9 w-40 sm:h-10" />
             <Skeleton className="h-5 w-64" />
           </div>
 
           {/* 견적서 콘텐츠 */}
-          <div className="mx-auto max-w-5xl space-y-6">
+          <div className="mx-auto max-w-3xl space-y-6">
             {/* InvoiceHeader 스켈레톤 */}
             <Card>
               <CardHeader className="space-y-1">
@@ -124,27 +124,21 @@ export default function InvoiceLoading() {
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <Skeleton className="h-5 w-5 rounded-full" />
-                  <Skeleton className="h-6 w-24" />
+                  <Skeleton className="h-6 w-12" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {/* 소계 */}
-                  <div className="flex justify-between">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-4 w-28" />
+                {/* 총액 + 항목 개수 뱃지 */}
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="space-y-1">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-9 w-40 sm:h-10" />
                   </div>
-                  {/* VAT */}
-                  <div className="flex justify-between">
-                    <Skeleton className="h-4 w-24" />
-                    <Skeleton className="h-4 w-28" />
-                  </div>
-                  <Separator />
-                  {/* 총액 */}
-                  <div className="flex justify-between">
-                    <Skeleton className="h-6 w-20" />
-                    <Skeleton className="h-6 w-32" />
-                  </div>
+                  <Skeleton className="h-10 w-28 rounded-lg" />
+                </div>
+                {/* 부가세 안내 */}
+                <div className="mt-4 rounded-md border p-3">
+                  <Skeleton className="h-4 w-48" />
                 </div>
               </CardContent>
             </Card>

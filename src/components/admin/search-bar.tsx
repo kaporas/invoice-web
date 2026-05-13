@@ -58,6 +58,7 @@ export function SearchBar({ defaultValue = '' }: SearchBarProps) {
           variant="ghost"
           size="sm"
           onClick={handleClear}
+          aria-label="검색 초기화"
           className="absolute top-1/2 right-1 h-7 w-7 -translate-y-1/2 p-0"
         >
           <X className="h-4 w-4" />

@@ -13,6 +13,12 @@ export default function InvoicesLoading() {
         <Skeleton className="h-5 w-96" />
       </div>
 
+      {/* 검색바 + 필터 스켈레톤 */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <Skeleton className="h-10 w-full sm:w-96" />
+        <Skeleton className="h-10 w-24" />
+      </div>
+
       {/* 테이블 스켈레톤 */}
       <div className="space-y-4">
         <Skeleton className="h-10 w-full" />

@@ -8,7 +8,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import type { Invoice } from '@/types/invoice'
-import { Download } from 'lucide-react'
+import { Download, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import { ERROR_MESSAGES } from '@/lib/constants'
@@ -79,7 +79,11 @@ export function PDFDownloadButton({
       size={size}
       className={cn('gap-2', className)}
     >
-      <Download className="h-4 w-4" />
+      {isLoading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Download className="h-4 w-4" />
+      )}
       {isLoading ? 'PDF 생성 중...' : 'PDF 다운로드'}
     </Button>
   )

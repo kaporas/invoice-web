@@ -23,8 +23,8 @@ export type NotionDatabase = DatabaseObjectResponse
  * CSV 데이터의 실제 한글 속성명을 반영
  */
 export interface InvoicePageProperties {
-  /** 견적서 번호 (Title 속성) */
-  '견적서 번호': {
+  /** 견적서번호 (Title 속성) */
+  견적서번호: {
     type: 'title'
     title: Array<{ plain_text: string }>
   }
@@ -43,8 +43,8 @@ export interface InvoicePageProperties {
     type: 'date'
     date: { start: string } | null
   }
-  /** 총 금액 (Number 속성) */
-  '총 금액': {
+  /** 총금액 (Number 속성) */
+  총금액: {
     type: 'number'
     number: number | null
   }
@@ -98,7 +98,7 @@ export interface ItemPageProperties {
 export function isInvoicePage(
   page: NotionPage
 ): page is NotionPage & { properties: InvoicePageProperties } {
-  return 'properties' in page && '견적서 번호' in page.properties
+  return 'properties' in page && '견적서번호' in page.properties
 }
 
 /**

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
@@ -31,7 +32,7 @@ export default function InvoicesError({
             다시 시도
           </Button>
           <Button variant="outline" asChild className="flex-1">
-            <a href="/admin">관리자 홈으로</a>
+            <Link href="/admin">관리자 홈으로</Link>
           </Button>
         </div>
       </div>

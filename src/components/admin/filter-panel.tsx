@@ -122,12 +122,14 @@ export function FilterPanel({
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">상태</label>
+            <label htmlFor="status-filter" className="text-sm font-medium">
+              상태
+            </label>
             <Select
               value={status}
               onValueChange={v => setStatus(v as InvoiceStatus | 'all')}
             >
-              <SelectTrigger>
+              <SelectTrigger id="status-filter">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -140,10 +142,16 @@ export function FilterPanel({
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">발행일 (시작)</label>
+            <label className="text-sm font-medium" id="date-from-label">
+              발행일 (시작)
+            </label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start">
+                <Button
+                  variant="outline"
+                  aria-labelledby="date-from-label"
+                  className="w-full justify-start"
+                >
                   {dateFrom
                     ? format(dateFrom, 'PPP', { locale: ko })
                     : '날짜 선택'}
@@ -161,10 +169,16 @@ export function FilterPanel({
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">발행일 (종료)</label>
+            <label className="text-sm font-medium" id="date-to-label">
+              발행일 (종료)
+            </label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start">
+                <Button
+                  variant="outline"
+                  aria-labelledby="date-to-label"
+                  className="w-full justify-start"
+                >
                   {dateTo ? format(dateTo, 'PPP', { locale: ko }) : '날짜 선택'}
                 </Button>
               </PopoverTrigger>

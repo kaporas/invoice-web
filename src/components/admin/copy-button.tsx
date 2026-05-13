@@ -33,7 +33,7 @@ export function CopyButton({ text, label = '링크 복사' }: CopyButtonProps) {
             className="h-8 w-8"
           >
             {isCopied ? (
-              <Check className="h-4 w-4 text-green-600" />
+              <Check className="text-primary h-4 w-4" />
             ) : (
               <Copy className="h-4 w-4" />
             )}

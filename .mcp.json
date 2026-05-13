@@ -20,11 +20,9 @@
     },
     "shrimp-task-manager": {
       "command": "node",
-      "args": [
-        "/Users/gymcoding/workspace/mcp-shrimp-task-manager/dist/index.js"
-      ],
+      "args": ["/Users/workspaces/mcp-shrimp-task-manager/dist/index.js"],
       "env": {
-        "DATA_DIR": "/Users/gymcoding/workspace/courses/invoice-web/shrimp_data",
+        "DATA_DIR": "/Users/workspaces/invoice-web/shrimp_data",
         "TEMPLATES_USE": "en",
         "ENABLE_GUI": "true"
       }

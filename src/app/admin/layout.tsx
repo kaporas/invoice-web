@@ -32,8 +32,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     <div className="bg-background min-h-screen">
       <AdminHeader />
       <div className="flex">
-        <AdminNav />
-        <main className="flex-1 p-6">{children}</main>
+        <div className="hidden md:block">
+          <AdminNav />
+        </div>
+        <main className="min-w-0 flex-1 p-4 md:p-6">{children}</main>
       </div>
     </div>
   )
