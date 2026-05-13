@@ -1,17 +1,17 @@
-import { Footer } from '@/components/layout/footer'
-import { InvoiceHeader } from '@/components/invoice/InvoiceHeader'
 import { InvoiceClientInfo } from '@/components/invoice/InvoiceClientInfo'
-import { InvoiceTable } from '@/components/invoice/InvoiceTable'
-import { InvoiceSummary } from '@/components/invoice/InvoiceSummary'
-import { PDFDownloadButton } from '@/components/invoice/PDFDownloadButton'
+import { InvoiceHeader } from '@/components/invoice/InvoiceHeader'
 import { InvoiceSkeleton } from '@/components/invoice/InvoiceSkeleton'
-import { getOptimizedInvoice } from '@/lib/services/invoice.service'
-import { logger } from '@/lib/logger'
-import { notFound } from 'next/navigation'
+import { InvoiceSummary } from '@/components/invoice/InvoiceSummary'
+import { InvoiceTable } from '@/components/invoice/InvoiceTable'
+import { PDFDownloadButton } from '@/components/invoice/PDFDownloadButton'
+import { Footer } from '@/components/layout/footer'
 import { Separator } from '@/components/ui/separator'
-import { Suspense } from 'react'
-import type { Metadata } from 'next'
 import { formatCurrency } from '@/lib/format'
+import { logger } from '@/lib/logger'
+import { getOptimizedInvoice } from '@/lib/services/invoice.service'
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 interface InvoicePageProps {
   params: Promise<{
@@ -77,7 +77,7 @@ async function InvoiceContent({ id }: { id: string }) {
           {/* 페이지 타이틀 */}
           <div className="mx-auto mb-6 max-w-3xl">
             <h1 className="text-foreground text-3xl font-bold sm:text-4xl">
-              견적서 조회
+              [견적서 조회]
             </h1>
             <p className="text-muted-foreground mt-2">
               견적서의 상세 내용을 확인하실 수 있습니다.
