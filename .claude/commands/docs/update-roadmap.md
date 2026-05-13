@@ -120,7 +120,7 @@ allowed-tools: ['Read(docs/ROADMAP.md:*)', 'Edit(docs/ROADMAP.md:*)']
 ## 스마트 기능
 
 1. **자동 Phase 진행 추적**
-   - Phase 1 완료
+   - Phase 1 완료 함
    - Phase 2 진행 중
    - Phase 4 대기 중
 
