@@ -47,7 +47,7 @@ Notion DB → notion.ts → invoice.service.ts → cache.ts → invoice/[id]/pag
 
 Notion DB 속성명은 한국어이며, 타입/필터 구성 시 그대로 사용한다.
 
-**Invoices DB**: `견적서 번호`(Title), `클라이언트명`(Text), `발행일`(Date), `유효기간`(Date), `상태`(Select: `대기`/`승인`/`거절`), `총 금액`(Number), `항목`(Relation → Items)
+**Invoices DB**: `견적서 번호`(Title), `클라이언트명`(Text), `발행일`(Date), `유효기간`(Date), `상태`(Status: `대기`/`승인`/`거절`), `총 금액`(Number), `항목`(Relation → Items)
 
 **Items DB**: `항목명`(Title), `수량`(Number), `단가`(Number), `금액`(Formula), `견적서`(Relation → Invoices)
 

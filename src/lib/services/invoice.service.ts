@@ -325,7 +325,7 @@ export async function updateInvoiceStatus(
     page_id: pageId,
     properties: {
       상태: {
-        select: {
+        status: {
           name: NOTION_STATUS_MAP[status],
         },
       },
@@ -375,7 +375,7 @@ export async function searchInvoices(
 
       notionFilters.push({
         property: '상태',
-        select: { equals: statusMap[filters.status] },
+        status: { equals: statusMap[filters.status] },
       })
     }
 
