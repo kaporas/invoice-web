@@ -71,15 +71,25 @@ async function ExpirySection() {
 
 async function ChartSection() {
   const data = await getMonthlyStats(3)
+  const totalAmount = data.reduce((sum, d) => sum + d.amount, 0)
+  const totalCount = data.reduce((sum, d) => sum + d.count, 0)
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <BarChart2 className="text-muted-foreground h-4 w-4" />
-          최근 3개월 매출
-        </CardTitle>
+        <div className="flex items-start justify-between">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <BarChart2 className="text-muted-foreground h-4 w-4" />
+            최근 3개월 매출
+          </CardTitle>
+          <div className="text-right">
+            <p className="text-foreground text-lg font-bold">
+              {formatCurrency(totalAmount)}
+            </p>
+            <p className="text-muted-foreground text-xs">{totalCount}건</p>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
         <MonthlyChart data={data} />
       </CardContent>
     </Card>
