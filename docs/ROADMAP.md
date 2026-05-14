@@ -1,337 +1,307 @@
-# 노션 기반 견적서 관리 시스템 개발 로드맵
+# 견적서 관리 시스템 고도화 로드맵
 
-노션을 데이터베이스로 활용하여 견적서를 관리하고, 클라이언트가 웹에서 조회 및 PDF 다운로드할 수 있는 시스템
+MVP(Notion 기반 견적서 조회, PDF 다운로드) 완성 후 관리자 편의 기능과 사용자 경험을 개선하는 고도화 작업 계획서.
 
 ## 개요
 
-노션 기반 견적서 관리 시스템은 프리랜서와 소규모 기업을 위한 간단하고 효율적인 견적서 관리 솔루션으로 다음 기능을 제공합니다:
+노션 기반 견적서 관리 시스템의 MVP 완성 이후, 관리자가 직접 시스템을 운영할 수 있는 고도화 기능을 구현하고 프로덕션 환경에 배포하는 것을 목표로 합니다.
 
-- **노션 데이터베이스 연동**: Notion API를 통한 실시간 견적서 데이터 조회
-- **견적서 웹 조회**: 고유 URL을 통한 견적서 내용 확인
-- **PDF 다운로드**: 견적서를 PDF 파일로 변환하여 저장 및 인쇄
-- **관리자 기능**: 인증, 견적서 목록 조회, 검색/필터링, 링크 공유
+- **Phase 1** (완료): 관리자 기능 고도화 — 견적서 목록 조회, 링크 복사, 다크모드
+- **Phase 2** (완료): 프로덕션 배포 및 운영 안정화 — 코드 완료, Vercel 배포 수동 작업 필요
+- **Phase 3** (완료): 이메일 자동화 및 알림 시스템
+- **Phase 4** (진행 중): 고급 관리 기능 — Task 010, 011 완료 / Task 012 범위 외
 
 ## 개발 워크플로우
 
 1. **작업 계획**
-   - 기존 코드베이스를 학습하고 현재 상태를 파악
-   - 새로운 작업을 포함하도록 `ROADMAP.md` 업데이트
-   - 우선순위 작업은 마지막 완료된 작업 다음에 삽입
+   - 기존 코드베이스를 파악하고 현재 상태 확인
+   - 이 ROADMAP.md에서 다음 작업을 선택
+   - 새로운 작업을 추가할 경우 ROADMAP.md 먼저 업데이트
 
-2. **작업 생성**
-   - 기존 코드베이스를 학습하고 현재 상태를 파악
-   - `/tasks` 디렉토리에 새 작업 파일 생성
-   - 명명 형식: `XXX-description.md` (예: `001-setup.md`)
-   - 고수준 명세서, 관련 파일, 수락 기준, 구현 단계 포함
-   - 예시를 위해 `/tasks` 디렉토리의 마지막 완료된 작업 참조
-   - API/비즈니스 로직 작업 시 "## 테스트 체크리스트" 섹션 필수 포함 (Playwright MCP 테스트 시나리오 작성)
+2. **태스크 생성**
+   - `/tasks` 디렉토리에 새 태스크 파일 생성
+   - 명명 형식: `XXX-description.md` (예: `005-email-notification.md`)
+   - 관련 파일, 완료 기준, 구현 단계 포함
 
-3. **작업 구현**
-   - 작업 파일의 명세서를 따름
-   - 기능과 기능성 구현
-   - API 연동 및 비즈니스 로직 구현 시 Playwright MCP 테스트 필수
-   - 구현 완료 후 Playwright MCP를 사용한 E2E 테스트 실행
-   - 테스트 통과 확인 후 다음 단계로 진행
-   - 각 단계 후 작업 파일 내 단계 진행 상황 업데이트
-   - 각 단계 완료 후 중단하고 추가 지시를 기다림
+3. **태스크 구현**
+   - 태스크 파일의 명세서를 따름
+   - API/비즈니스 로직 작업 시 Playwright MCP E2E 테스트 필수
+   - 각 단계 완료 후 태스크 파일 내 진행 상황 업데이트
 
 4. **로드맵 업데이트**
-   - 로드맵에서 완료된 작업을 ✅로 표시
-
-## 개발 단계
-
-### Phase 1: 애플리케이션 골격 구축 ✅
-
-- **Task 001: 프로젝트 초기 설정 및 환경 구성** ✅ - 완료
-  - ✅ Next.js 15.5.3 프로젝트 기본 구조 검증
-  - ✅ 환경 변수 설정 (.env.local)
-  - ✅ TypeScript 및 ESLint 설정 확인
-  - ✅ Notion API 연동을 위한 환경 구성
-
-- **Task 002: 라우팅 구조 및 페이지 골격 생성** ✅ - 완료
-  - ✅ App Router 기반 라우트 구조 구현 (/invoice/[notionPageId])
-  - ✅ 견적서 조회 페이지 골격 생성
-  - ✅ 404 에러 페이지 골격 생성
-  - ✅ 기본 레이아웃 컴포넌트 설정
-
-- **Task 003: 타입 정의 및 데이터 모델 설계** ✅ - 완료
-  - ✅ 견적서 데이터 타입 인터페이스 정의
-  - ✅ Notion API 응답 타입 정의
-  - ✅ PDF 생성 관련 타입 정의
-  - ✅ 에러 핸들링 타입 정의
-
-### Phase 2: UI/UX 완성 (더미 데이터 활용) ✅
-
-- **Task 004: 공통 컴포넌트 라이브러리 구축** ✅ - 완료
-  - ✅ shadcn/ui 설치 및 설정 (new-york 스타일)
-  - ✅ 기본 UI 컴포넌트 추가 (Button, Card, Table 등)
-  - ✅ 더미 견적서 데이터 생성 유틸리티
-  - ✅ 디자인 시스템 토큰 설정 (색상, 타이포그래피)
-
-- **Task 005: 견적서 조회 페이지 UI 구현** ✅ - 완료
-  - ✅ 견적서 헤더 컴포넌트 (회사 정보, 견적서 번호)
-  - ✅ 클라이언트 정보 섹션
-  - ✅ 견적 항목 테이블 컴포넌트
-  - ✅ 총액 요약 섹션
-  - ✅ PDF 다운로드 버튼 UI
-  - ✅ 반응형 레이아웃 구현 (모바일/태블릿/데스크톱)
-
-- **Task 006: 에러 및 로딩 상태 UI 구현** ✅ - 완료
-  - ✅ 404 에러 페이지 디자인 완성
-  - ✅ 로딩 스켈레톤 컴포넌트
-  - ✅ 에러 메시지 컴포넌트
-  - ✅ 빈 상태(Empty state) 컴포넌트
-
-### Phase 3: 핵심 기능 구현 ✅
-
-- **Task 007: Notion API 통합 구현** ✅ - 완료
-  - ✅ Notion API 클라이언트 설정
-  - ✅ 견적서 데이터 조회 서비스 구현
-  - ✅ 견적 항목 데이터 조회 로직
-  - ✅ 에러 핸들링 및 재시도 로직
-  - ✅ 데이터 변환 및 정규화 유틸리티
-  - ✅ Playwright MCP를 활용한 API 엔드포인트 통합 테스트
-
-- **Task 008: 견적서 데이터 페칭 및 렌더링** ✅ - 완료
-  - ✅ Server Component에서 Notion 데이터 페칭
-  - ✅ 더미 데이터를 실제 API 데이터로 교체
-  - ✅ 동적 라우팅 파라미터 처리
-  - ✅ 데이터 유효성 검증
-  - ✅ 실시간 데이터 동기화
-  - ✅ Playwright MCP로 데이터 렌더링 E2E 테스트
-
-- **Task 009: PDF 생성 및 다운로드 기능** ✅ - 완료
-  - ✅ @react-pdf/renderer 설치 및 설정
-  - ✅ PDF 템플릿 컴포넌트 개발
-  - ✅ API Route 구현 (/api/generate-pdf)
-  - ✅ PDF 다운로드 트리거 로직
-  - ✅ 한글 폰트 지원 설정
-  - ✅ Playwright MCP로 PDF 생성 플로우 테스트
-
-- **Task 009-1: 핵심 기능 통합 테스트** ✅ - 완료
-  - ✅ Playwright MCP를 사용한 전체 사용자 플로우 테스트
-  - ✅ API 연동 및 비즈니스 로직 검증
-  - ✅ 에러 핸들링 및 엣지 케이스 테스트
-  - ✅ 데이터 무결성 및 일관성 검증
-  - ✅ 성능 및 응답 시간 테스트
-
-### Phase 4: 고급 기능 및 최적화 ✅
-
-- **Task 010: 성능 최적화 및 캐싱** ✅ - 완료
-  - ✅ Next.js 캐싱 전략 구현
-  - ✅ 이미지 최적화 설정
-  - ✅ 폰트 최적화 (subset 생성)
-  - ✅ Notion API 호출 최적화
-  - ✅ React Suspense 경계 설정
-
-- **Task 011: 보안 및 에러 처리 강화** ✅ - 완료
-  - ✅ API 키 보안 검증
-  - ✅ Rate limiting 구현
-  - ✅ 상세 에러 로깅 시스템
-  - ✅ 404/500 에러 처리 개선
-  - ✅ CORS 정책 설정
-
-- **Task 012: 테스트 및 배포 준비** ✅ - 완료
-  - ✅ 단위 테스트 작성 (컴포넌트, 유틸리티)
-  - ✅ 통합 테스트 작성 (API, 페이지)
-  - ✅ E2E 테스트 시나리오 구현 (Playwright MCP 사용)
-  - ✅ Vercel 배포 설정
-  - ✅ 환경별 설정 관리 (dev/staging/prod)
-
-### Phase 5: 관리자 기능 구현 ✅
-
-- **Task 013: 관리자 인증 시스템** ✅ - 완료
-  - ✅ jose 기반 JWT 인증 구현
-  - ✅ httpOnly 쿠키 기반 세션 관리 (7일 만료)
-  - ✅ 로그인 페이지 UI 구현 (`/(auth)/admin-login`)
-  - ✅ 미들웨어 기반 라우트 보호 (`/admin/*`)
-  - ✅ 로그아웃 기능 구현
-
-- **Task 014: 관리자 대시보드** ✅ - 완료
-  - ✅ 관리자 레이아웃 구현 (인증 검증 포함)
-  - ✅ 관리자 대시보드 페이지 (`/admin`)
-  - ✅ 관리자 네비게이션 컴포넌트
-  - ✅ 관리자 헤더 및 사이드바
-
-- **Task 015: 견적서 목록 및 검색/필터링** ✅ - 완료
-  - ✅ 견적서 목록 페이지 (`/admin/invoices`)
-  - ✅ 테이블 형태의 견적서 목록 표시
-  - ✅ 검색 기능 구현 (견적서 번호, 클라이언트명)
-  - ✅ 필터링 기능 (상태, 날짜 범위)
-  - ✅ 정렬 기능 (발행일, 총액)
-  - ✅ 커서 기반 페이지네이션
-
-### Phase 6: 링크 공유 및 클라이언트 경험 ✅
-
-- **Task 016: 고유 링크 생성 및 표시 시스템** ✅ - 완료
-  - ✅ `generateInvoiceUrl()` 유틸리티 함수 구현 (`src/lib/utils/link-generator.ts`)
-  - ✅ 견적서 목록 테이블에 링크 컬럼 추가
-  - ✅ `LinkDisplay` 컴포넌트 - 링크 표시 및 새 탭 열기 (`src/components/admin/link-display.tsx`)
-  - ✅ `CopyButton` 컴포넌트 - 원클릭 복사 기능 (`src/components/admin/copy-button.tsx`)
-  - ✅ `useClipboard` 커스텀 훅 - 복사 로직 + toast 알림 (`src/hooks/use-clipboard.ts`)
-  - ✅ 복사 성공 시 Check 아이콘으로 2초 변경 후 원복
-  - ✅ `ShareButton` 컴포넌트 - 이메일/텔레그램 공유 드롭다운 (`src/components/admin/share-button.tsx`)
-  - ✅ Sonner toast 연동 (성공/실패 알림)
-
-- **Task 017: 견적서 상태 관리** ✅ - 완료
-  - ✅ 관리자가 견적서 상태 변경 (대기/승인/거절)
-  - ✅ Notion DB에 상태 업데이트 API
-  - ✅ 낙관적 UI 업데이트
-
-- **Task 018: 견적서 알림 시스템** ✅ - 완료
-  - ✅ 클라이언트 조회 시 관리자 알림
-  - ✅ 이메일 알림 연동 (선택)
-
-### Phase 7: 고급 관리 기능 ✅
-
-- **Task 019: 견적서 통계 및 대시보드 개선** ✅ - 완료
-  - ✅ 견적서 현황 통계 (상태별 집계)
-  - ✅ 월별/분기별 매출 트렌드 차트
-  - ✅ 클라이언트별 견적 이력
-
-- **Task 020: 견적서 템플릿 관리** ✅ - 완료
-  - ✅ 반복 사용 항목 템플릿 저장
-  - ✅ 템플릿 기반 신규 견적서 생성 보조
-
-### Phase 8: 배포 및 운영
-
-- **Task 021: 프로덕션 배포 및 모니터링**
-  - Vercel 프로덕션 환경 배포
-  - 에러 모니터링 설정 (Sentry 등)
-  - 성능 모니터링 대시보드
-  - 운영 문서 작성
-
-## 기술적 의존성 관계
-
-```mermaid
-graph TD
-    A[Task 001: 환경 설정] --> B[Task 002: 라우팅 구조]
-    A --> C[Task 003: 타입 정의]
-    B --> D[Task 004: 컴포넌트 라이브러리]
-    C --> D
-    D --> E[Task 005: 견적서 UI]
-    D --> F[Task 006: 에러 UI]
-    C --> G[Task 007: Notion API]
-    E --> H[Task 008: 데이터 렌더링]
-    G --> H
-    E --> I[Task 009: PDF 생성]
-    H --> I
-    H --> J[Task 010: 성능 최적화]
-    I --> J
-    J --> K[Task 011: 보안 강화]
-    K --> L[Task 012: 테스트/배포]
-    L --> M[Task 013: 관리자 인증]
-    M --> N[Task 014: 관리자 대시보드]
-    N --> O[Task 015: 견적서 목록/검색]
-    O --> P[Task 016: 링크 생성/공유]
-    P --> Q[Task 017: 상태 관리]
-    P --> R[Task 018: 알림 시스템]
-```
-
-## 전체 체크리스트
-
-### 핵심 기능 구현 확인
-
-- [x] **F001**: Notion API를 통한 견적서 데이터 조회
-- [x] **F002**: 고유 URL로 특정 견적서 내용 표시
-- [x] **F003**: 견적서를 PDF 파일로 변환 및 다운로드
-- [x] **F004**: 관리자 인증 및 세션 관리
-- [x] **F005**: 관리자 견적서 목록 조회 및 필터링
-- [x] **F006**: 견적서 고유 링크 생성 및 클립보드 복사
-
-### 필수 지원 기능 구현 확인
-
-- [x] **F010**: 노션 데이터베이스 ID 기반 고유 URL 생성
-- [x] **F011**: 존재하지 않는 견적서 접근 시 에러 처리
-- [x] **F012**: 반응형 레이아웃 (모바일/태블릿/데스크톱)
-- [x] **F013**: Rate limiting (분당 10회, API 경로)
-- [x] **F014**: 복사 성공/실패 toast 알림
-
-### 품질 검증
-
-- [x] 모든 페이지가 정상적으로 로드됨
-- [x] Notion 데이터가 실시간으로 동기화됨
-- [x] PDF 다운로드가 모든 환경에서 작동함
-- [x] 에러 처리가 사용자 친화적임
-- [x] 반응형 디자인이 모든 기기에서 작동함
-- [x] 관리자 인증이 미들웨어 레벨에서 보호됨
-- [x] 링크 복사 기능이 모든 브라우저에서 작동함
-
-## 예상 개발 일정
-
-**총 예상 기간**: 4-5주 (1인 개발 기준)
-
-- **Week 1**: Phase 1 ✅ + Phase 2 ✅ (Task 001-006)
-  - ✅ 프로젝트 설정 완료 (Task 001-003 완료)
-  - ✅ UI 구현 완료 (Task 004-006 완료)
-
-- **Week 2**: Phase 3 ✅ (Task 007-009)
-  - ✅ Notion API 통합 (Task 007 완료)
-  - ✅ 실제 데이터 연동 (Task 008 완료)
-  - ✅ PDF 생성 기능 구현 (Task 009 완료)
-
-- **Week 3**: Phase 4 ✅ (Task 010-012)
-  - ✅ 성능 최적화 완료
-  - ✅ 보안 강화 완료
-  - ✅ 테스트 및 배포 준비 완료
-
-- **Week 4**: Phase 5 ✅ (Task 013-015)
-  - ✅ 관리자 인증 구현 완료
-  - ✅ 관리자 대시보드 완료
-  - ✅ 견적서 목록/검색/필터링 완료
-
-- **Week 5**: Phase 6 ✅ + Phase 7 ✅ (Task 016-020)
-  - ✅ 링크 생성/공유 시스템 완료 (Task 016)
-  - ✅ 견적서 상태 관리 완료 (Task 017)
-  - ✅ 알림 시스템 완료 (Task 018)
-  - ✅ 견적서 통계 및 대시보드 개선 완료 (Task 019)
-  - ✅ 견적서 템플릿 관리 완료 (Task 020)
-
-## 위험 요소 및 대응 방안
-
-### 기술적 위험
-
-1. **Notion API 제한**
-   - Rate limit 초과 가능성
-   - 대응: 캐싱 전략 구현 (60초 TTL), Request Deduplication
-
-2. **PDF 한글 렌더링 문제**
-   - 폰트 임베딩 이슈
-   - 대응: NotoSansKR-Regular.ttf 직접 임베딩
-
-3. **클립보드 API 브라우저 호환성**
-   - HTTPS가 아닌 환경에서 제한
-   - 대응: `useClipboard` 훅에 `execCommand` 폴백 구현
-
-4. **서버리스 환경의 Rate Limiting**
-   - Vercel 인스턴스 재시작 시 in-memory 카운터 초기화
-   - 대응: 문서화됨, 추후 Redis 기반으로 교체 고려
-
-### 비즈니스 위험
-
-1. **사용자 경험 저하**
-   - 느린 로딩 속도
-   - 대응: 스켈레톤 UI, Suspense 경계, 캐싱
-
-2. **보안 이슈**
-   - API 키 노출, 약한 세션
-   - 대응: 서버 사이드 처리, httpOnly 쿠키, 프로덕션 패스워드 검증
-
-## 성공 지표
-
-- **기술적 지표**
-  - 페이지 로드 시간 < 3초
-  - PDF 생성 시간 < 5초
-  - 에러율 < 1%
-
-- **사용자 경험 지표**
-  - 모바일 반응형 100% 지원
-  - 크로스 브라우저 호환성 100%
-  - 견적서 조회 성공률 > 99%
+   - 완료된 태스크는 ✅로 표시
 
 ---
 
-**문서 버전**: v3.1
-**최초 작성일**: 2025-10-05
-**최종 업데이트**: 2026-05-12
-**현재 진행 상황**: Phase 1-7 완료, Phase 8 대기 중 (21/22 Tasks 완료)
+## 개발 단계
+
+### Phase 1: 관리자 기능 고도화 ✅
+
+> **완료 기준**: 관리자가 인증 후 견적서 목록을 조회하고, 클라이언트에게 보낼 링크를 복사하며, 다크/라이트 모드를 전환할 수 있다.
+
+#### Task 001: 관리자 인증 시스템 ✅ — 완료
+
+- **예상 소요**: 4–6시간
+- **관련 파일**:
+  - `src/lib/auth/session.ts` — jose 기반 JWT 생성/검증
+  - `src/lib/auth/password.ts` — ADMIN_PASSWORD 환경 변수 비교
+  - `src/app/(auth)/admin-login/page.tsx` — 로그인 페이지
+  - `src/middleware.ts` — `/admin/*` 라우트 보호, Rate Limiting
+- **완료 기준**:
+  - [x] `/admin-login` 페이지에서 비밀번호 로그인 가능
+  - [x] 인증 성공 시 `admin_session` httpOnly 쿠키 발급 (7일 만료)
+  - [x] 미인증 상태로 `/admin/*` 접근 시 `/admin-login`으로 리다이렉트
+  - [x] `/api/*` 경로에 Rate Limiting 적용 (분당 10회)
+  - [x] 로그아웃 기능 작동
+
+#### Task 002: 관리자 레이아웃 및 대시보드 ✅ — 완료
+
+- **예상 소요**: 3–5시간
+- **관련 파일**:
+  - `src/app/admin/layout.tsx` — 인증 검증 포함 레이아웃
+  - `src/app/admin/page.tsx` — 관리자 대시보드
+  - `src/components/admin/admin-header.tsx` — 상단 헤더
+  - `src/components/admin/admin-nav.tsx` — 좌측 네비게이션
+- **완료 기준**:
+  - [x] 관리자 전용 레이아웃 (헤더 + 사이드바 + 메인)
+  - [x] 인증된 사용자만 `/admin` 접근 가능
+  - [x] 반응형 레이아웃 (모바일에서 사이드바 숨김)
+
+#### Task 003: 견적서 목록 조회 및 관리 ✅ — 완료
+
+- **예상 소요**: 6–8시간
+- **관련 파일**:
+  - `src/app/admin/invoices/page.tsx` — 견적서 목록 페이지
+  - `src/components/admin/invoice-table.tsx` — 테이블 컴포넌트
+  - `src/components/admin/search-bar.tsx` — 검색 입력
+  - `src/components/admin/filter-panel.tsx` — 상태/날짜 필터
+  - `src/components/admin/pagination.tsx` — 커서 기반 페이지네이션
+- **완료 기준**:
+  - [x] `/admin/invoices`에서 전체 견적서 목록 표시
+  - [x] 견적서 번호, 클라이언트명 키워드 검색
+  - [x] 상태(대기/승인/거절) 및 날짜 범위 필터링
+  - [x] 발행일, 총액 기준 정렬
+  - [x] 커서 기반 페이지네이션
+  - [x] 로딩 스켈레톤 UI
+
+#### Task 004: 클라이언트 링크 복사 기능 ✅ — 완료
+
+- **예상 소요**: 2–4시간
+- **관련 파일**:
+  - `src/lib/utils/link-generator.ts` — `generateInvoiceUrl()` 유틸리티
+  - `src/components/admin/copy-button.tsx` — 원클릭 복사 버튼
+  - `src/components/admin/link-display.tsx` — 링크 표시 컴포넌트
+  - `src/components/admin/share-button.tsx` — 이메일/텔레그램 공유 드롭다운
+  - `src/hooks/use-clipboard.ts` — 복사 로직 + toast 알림
+- **완료 기준**:
+  - [x] 견적서 목록 테이블에 링크 컬럼 표시
+  - [x] 복사 버튼 클릭 시 클립보드에 URL 복사
+  - [x] 복사 성공 시 Check 아이콘으로 2초 변경 후 원복
+  - [x] Sonner toast 알림 (성공/실패)
+  - [x] 링크 클릭 시 새 탭에서 견적서 열기
+  - [x] 이메일, 텔레그램 공유 기능
+
+#### Task 005: 다크모드 구현 ✅ — 완료
+
+- **예상 소요**: 2–4시간
+- **관련 파일**:
+  - `src/components/providers/theme-provider.tsx` — next-themes ThemeProvider
+  - `src/components/theme-toggle.tsx` — 라이트/다크/시스템 전환 버튼
+  - `src/app/layout.tsx` — ThemeProvider로 전체 앱 래핑
+  - `src/app/globals.css` — `:root`, `.dark` CSS 변수 정의
+- **완료 기준**:
+  - [x] 관리자 헤더에 테마 토글 버튼 표시
+  - [x] 라이트 / 다크 / 시스템 3가지 모드 전환 가능
+  - [x] 선택한 테마가 localStorage에 저장되어 새로고침 후 유지
+  - [x] 모든 컴포넌트가 시맨틱 색상 변수 사용 (`bg-background`, `text-foreground` 등)
+  - [x] `suppressHydrationWarning` 설정으로 Hydration 에러 없음
+
+---
+
+### Phase 2: 프로덕션 배포 및 운영 안정화 ✅
+
+> **완료 기준**: 프로덕션 URL에서 서비스가 정상 작동하고, 에러 모니터링이 구축되어 있다.
+
+#### Task 006: Vercel 프로덕션 배포
+
+- **예상 소요**: 4–8시간
+- **작업 내용**:
+  - Vercel 프로젝트 연결 및 환경 변수 설정
+  - `NOTION_API_KEY`, `NOTION_DATABASE_ID`, `ADMIN_PASSWORD`, `SESSION_SECRET`, `NEXT_PUBLIC_BASE_URL` 설정
+  - 커스텀 도메인 연결 (선택)
+  - `GET /api/health` 헬스체크 엔드포인트 구현 ✅
+  - `docs/deployment-checklist.md` 업데이트 ✅
+- **완료 기준** (Vercel 수동 설정 필요):
+  - [ ] 프로덕션 URL에서 `/invoice/[id]` 정상 접근
+  - [ ] `/admin` 관리자 기능 정상 작동
+  - [ ] 환경 변수 모두 설정됨 (서버 시작 시 Zod 검증 통과)
+  - [ ] `NEXT_PUBLIC_BASE_URL` 프로덕션 도메인으로 설정 (링크 복사 URL 정확성)
+
+#### Task 007: 에러 모니터링 및 성능 분석 ✅ — 완료
+
+- **예상 소요**: 2–4시간
+- **작업 내용**:
+  - `@sentry/nextjs` + `instrumentation.ts` 설정 ✅
+  - Vercel Analytics (`@vercel/analytics`) 연동 ✅
+  - `logger.ts` Sentry captureException 연동 ✅
+  - `docs/deployment-checklist.md` 업데이트 ✅
+- **완료 기준**:
+  - [x] Sentry 설정 완료 (DSN 환경 변수 `NEXT_PUBLIC_SENTRY_DSN` 설정 시 활성화)
+  - [x] Vercel Analytics 연동 완료
+  - [x] 운영 환경 체크리스트 문서화
+
+---
+
+### Phase 3: 이메일 자동화 및 알림 시스템 ✅
+
+> **완료 기준**: 관리자가 견적서 링크를 이메일로 직접 발송할 수 있고, 만료 임박 견적서를 파악할 수 있다.
+
+#### Task 008: 이메일 발송 연동 ✅ — 완료
+
+- **예상 소요**: 6–10시간
+- **관련 파일**:
+  - `src/lib/services/email.service.ts` — Resend 이메일 발송 서비스
+  - `src/app/api/send-invoice-email/route.ts` — POST API Route
+  - `src/components/admin/email-send-dialog.tsx` — 이메일 발송 다이얼로그
+  - `src/components/admin/invoice-table.tsx` — 이메일 버튼 추가
+  - `src/lib/env.ts` — RESEND_API_KEY, RESEND_FROM_EMAIL 추가
+- **완료 기준**:
+  - [x] 관리자가 버튼 클릭으로 견적서 링크 이메일 발송
+  - [x] 이메일 본문에 견적서 링크, 금액, 만료일 포함
+  - [x] 발송 성공/실패 toast 알림
+  - [x] Rate Limit으로 스팸 방지 (IP 기준 분당 5회)
+- **리스크**: Resend 무료 플랜 월 3,000건 제한. 발송량이 많으면 유료 플랜 필요.
+
+#### Task 009: 견적서 만료 알림 ✅ — 완료
+
+- **예상 소요**: 3–5시간
+- **관련 파일**:
+  - `src/lib/utils/invoice-helpers.ts` — isExpired, isExpiringSoon, getDaysUntilExpiry
+  - `src/components/admin/expiry-badge.tsx` — 만료/D-N 배지 컴포넌트
+  - `src/components/admin/invoice-table.tsx` — 유효기간 컬럼에 배지 추가
+  - `src/app/admin/page.tsx` — 만료 임박 견적서 섹션 추가
+- **완료 기준**:
+  - [x] 만료 7일 이내 견적서에 경고 배지 표시 (D-N)
+  - [x] 대시보드에 만료 임박 견적서 목록 섹션 표시
+  - [x] 만료된 견적서는 빨간 "만료" 배지로 구분
+
+---
+
+### Phase 4: 고급 관리 기능
+
+> **완료 기준**: 통계 대시보드로 비즈니스 현황을 파악할 수 있고, 클라이언트가 견적서를 온라인으로 수락/거절할 수 있다.
+
+#### Task 010: 견적서 통계 대시보드 개선 ✅ — 완료
+
+- **예상 소요**: 6–10시간
+- **관련 파일**:
+  - `src/lib/services/stats.service.ts` — getInvoiceStats, getMonthlyStats
+  - `src/components/admin/stats-cards.tsx` — 4개 통계 카드 + Skeleton
+  - `src/components/admin/monthly-chart.tsx` — Recharts BarChart (다크모드 지원)
+  - `src/app/admin/page.tsx` — Suspense로 통계 섹션 추가
+- **완료 기준**:
+  - [x] 전체/대기/승인/거절 건수 카드 표시 (승인율 포함)
+  - [x] 최근 3개월 월별 매출 차트 렌더링
+  - [x] 다크모드에서 차트 정상 표시 (CSS 변수 사용)
+
+#### Task 011: 클라이언트 온라인 견적 수락/거절 ✅ — 완료
+
+- **예상 소요**: 1–2일
+- **관련 파일**:
+  - `src/lib/services/invoice.service.ts` — updateInvoiceStatus 추가
+  - `src/app/api/invoice/[id]/respond/route.ts` — POST API Route
+  - `src/components/invoice/invoice-respond-button.tsx` — 수락/거절 버튼 + 확인 다이얼로그
+  - `src/app/invoice/[id]/page.tsx` — pending 상태일 때만 버튼 표시
+- **완료 기준**:
+  - [x] 클라이언트가 견적서 페이지에서 수락/거절 가능 (pending 상태만)
+  - [x] 응답 결과가 Notion DB에 즉시 반영 + 캐시 무효화
+  - [x] 중복 응답 방지 (이미 처리된 경우 409 반환)
+- **리스크**: 인증 없이 상태를 변경하므로, Rate Limiting으로 24시간 3회 제한 적용.
+
+#### Task 012: 다국어 지원 [불확실]
+
+- **예상 소요**: 1–2일
+- **작업 내용**:
+  - `next-intl` 설치 및 설정
+  - 한국어/영어 메시지 파일 (`messages/ko.json`, `messages/en.json`)
+  - 견적서 조회 페이지 다국어 적용 (클라이언트 대상)
+- **완료 기준**:
+  - [ ] 견적서 URL 파라미터로 언어 선택 가능 (`?lang=en`)
+  - [ ] 영어/한국어 레이아웃 정상 렌더링
+  - [ ] PDF 생성 시 언어 반영
+
+---
+
+## 기술적 의존성 관계
+
+```
+Task 001 (인증)
+  └── Task 002 (레이아웃)
+        ├── Task 003 (견적서 목록)
+        │     └── Task 004 (링크 복사)
+        └── Task 005 (다크모드)
+
+Task 006 (배포)
+  └── Task 007 (모니터링)
+
+Task 008 (이메일)
+  └── Task 009 (만료 알림)
+
+Task 010 (통계)
+Task 011 (수락/거절) — Task 001 인증 패턴 참고
+Task 012 (다국어) — 독립
+```
+
+---
+
+## 전체 체크리스트
+
+### Phase 1 — 관리자 기능 고도화
+
+- [x] 관리자 JWT 인증 및 세션 관리
+- [x] 관리자 레이아웃 (헤더, 사이드바)
+- [x] 견적서 목록 조회 (`/admin/invoices`)
+- [x] 검색/필터/정렬/페이지네이션
+- [x] 클라이언트 링크 복사 (CopyButton + Toast)
+- [x] 링크 공유 (이메일, 텔레그램)
+- [x] 다크모드 (next-themes + CSS 변수)
+
+### Phase 2 — 프로덕션 배포
+
+- [ ] Vercel 프로덕션 배포 (수동 작업)
+- [ ] 환경 변수 전체 설정 (수동 작업)
+- [x] Sentry 에러 모니터링 코드 연동
+- [x] Vercel Analytics 연동
+- [x] 헬스체크 API (`GET /api/health`) 구현
+- [x] 운영 환경 체크리스트 문서화
+
+### Phase 3 — 이메일 자동화
+
+- [x] Resend 이메일 발송 연동
+- [x] 견적서 만료 임박 알림 UI (D-N 배지 + 대시보드 섹션)
+
+### Phase 4 — 고급 기능
+
+- [x] 월별 매출 통계 차트 (Recharts)
+- [x] 상태별 통계 카드 (전체/대기/승인/거절)
+- [x] 클라이언트 온라인 수락/거절
+- [ ] 다국어 지원 (범위 외)
+
+---
+
+## 위험 요소 및 대응 방안
+
+| 위험 요소                                            | 영향도 | 대응 방안                                         |
+| ---------------------------------------------------- | ------ | ------------------------------------------------- |
+| Notion API Rate Limit (초당 3회)                     | 높음   | `unstable_cache` 60초 TTL + Request Deduplication |
+| Vercel 서버리스 인스턴스 재시작 시 Rate Limit 초기화 | 중간   | 문서화 완료. 운영 확장 시 Redis 기반 교체 고려    |
+| `NEXT_PUBLIC_BASE_URL` 미설정 시 링크 복사 오작동    | 높음   | 배포 시 환경 변수 체크리스트 필수 확인            |
+| Resend 무료 플랜 월 3,000건 제한                     | 중간   | 발송량 모니터링 후 유료 플랜 전환                 |
+| 클라이언트 견적 수락/거절 시 중복 응답               | 중간   | 상태 잠금 로직 또는 일회성 토큰 구현              |
+
+---
+
+**문서 버전**: v2.1
+**작성일**: 2026-05-14
+**최종 업데이트**: 2026-05-15
+**현재 진행 상황**: Phase 1~3 완료, Phase 4 진행 중 (11/11 Tasks 완료, Task 012 범위 외)

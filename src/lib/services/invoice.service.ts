@@ -301,6 +301,40 @@ export async function getInvoicesFromNotion(
  * @returns InvoiceListResult 객체
  * @throws Error - 검색 실패 시
  */
+const NOTION_STATUS_MAP: Record<'approved' | 'rejected', string> = {
+  approved: '승인',
+  rejected: '거절',
+}
+
+/**
+ * 견적서 상태 업데이트 (수락/거절)
+ * @param pageId - 견적서 페이지 ID
+ * @param status - 변경할 상태 ('approved' | 'rejected')
+ * @throws Error - 이미 처리된 견적서이거나 업데이트 실패 시
+ */
+export async function updateInvoiceStatus(
+  pageId: string,
+  status: 'approved' | 'rejected'
+): Promise<void> {
+  const invoice = await getInvoiceFromNotion(pageId)
+  if (invoice.status !== 'pending') {
+    throw new Error('이미 처리된 견적서입니다.')
+  }
+
+  await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      상태: {
+        select: {
+          name: NOTION_STATUS_MAP[status],
+        },
+      },
+    },
+  })
+
+  logger.info('견적서 상태 업데이트', { pageId, status })
+}
+
 export async function searchInvoices(
   filters: InvoiceFilters,
   pageSize: number = 10,

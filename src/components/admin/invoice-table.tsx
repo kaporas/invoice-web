@@ -16,15 +16,14 @@ import { generateInvoiceUrl } from '@/lib/utils/link-generator'
 import { LinkDisplay } from '@/components/admin/link-display'
 import { CopyButton } from '@/components/admin/copy-button'
 import { ShareButton } from '@/components/admin/share-button'
+import { EmailSendDialog } from '@/components/admin/email-send-dialog'
+import { ExpiryBadge } from '@/components/admin/expiry-badge'
 
 interface InvoiceTableProps {
   invoices: Invoice[]
   currentSort?: 'issue_date' | 'total_amount'
 }
 
-/**
- * 견적서 상태별 배지 설정
- */
 const statusConfig: Record<
   InvoiceStatus,
   { label: string; variant: 'default' | 'secondary' | 'destructive' }
@@ -34,9 +33,6 @@ const statusConfig: Record<
   rejected: { label: '거절', variant: 'destructive' },
 }
 
-/**
- * 정렬 버튼 컴포넌트
- */
 function SortButton({
   field,
   currentSort,
@@ -61,10 +57,6 @@ function SortButton({
   )
 }
 
-/**
- * 견적서 테이블 컴포넌트
- * shadcn/ui Table로 견적서 목록을 테이블 형태로 표시
- */
 export function InvoiceTable({ invoices, currentSort }: InvoiceTableProps) {
   return (
     <div className="overflow-x-auto rounded-md border">
@@ -78,14 +70,14 @@ export function InvoiceTable({ invoices, currentSort }: InvoiceTableProps) {
                 발행일
               </SortButton>
             </TableHead>
-            <TableHead className="w-[140px]">유효기간</TableHead>
+            <TableHead className="w-[180px]">유효기간</TableHead>
             <TableHead className="w-[140px] text-right">
               <SortButton field="total_amount" currentSort={currentSort}>
                 총액
               </SortButton>
             </TableHead>
             <TableHead className="w-[100px]">상태</TableHead>
-            <TableHead className="w-[250px]">링크</TableHead>
+            <TableHead className="w-[260px]">링크</TableHead>
             <TableHead className="w-[100px] text-right">작업</TableHead>
           </TableRow>
         </TableHeader>
@@ -107,7 +99,12 @@ export function InvoiceTable({ invoices, currentSort }: InvoiceTableProps) {
               </TableCell>
               <TableCell>{invoice.clientName}</TableCell>
               <TableCell>{formatDate(invoice.issueDate, 'short')}</TableCell>
-              <TableCell>{formatDate(invoice.validUntil, 'short')}</TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  {formatDate(invoice.validUntil, 'short')}
+                  <ExpiryBadge invoice={invoice} />
+                </div>
+              </TableCell>
               <TableCell className="text-right font-medium">
                 {formatCurrency(invoice.totalAmount)}
               </TableCell>
@@ -117,9 +114,13 @@ export function InvoiceTable({ invoices, currentSort }: InvoiceTableProps) {
                 </Badge>
               </TableCell>
               <TableCell>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <LinkDisplay url={generateInvoiceUrl(invoice.id)} />
                   <CopyButton text={generateInvoiceUrl(invoice.id)} />
+                  <EmailSendDialog
+                    invoiceId={invoice.id}
+                    invoiceNumber={invoice.invoiceNumber}
+                  />
                   <ShareButton
                     url={generateInvoiceUrl(invoice.id)}
                     title={invoice.invoiceNumber}

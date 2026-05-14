@@ -1,5 +1,6 @@
 import { InvoiceClientInfo } from '@/components/invoice/InvoiceClientInfo'
 import { InvoiceHeader } from '@/components/invoice/InvoiceHeader'
+import { InvoiceRespondButton } from '@/components/invoice/invoice-respond-button'
 import { InvoiceSkeleton } from '@/components/invoice/InvoiceSkeleton'
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary'
 import { InvoiceTable } from '@/components/invoice/InvoiceTable'
@@ -104,6 +105,10 @@ async function InvoiceContent({ id }: { id: string }) {
             {/* 액션 버튼 영역 */}
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <PDFDownloadButton invoice={invoiceData} size="lg" />
+              <InvoiceRespondButton
+                invoiceId={invoiceData.id}
+                currentStatus={invoiceData.status}
+              />
             </div>
 
             {/* 안내 메시지 */}

@@ -3,6 +3,7 @@ import { Geist_Mono, Noto_Sans_KR } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { Analytics } from '@vercel/analytics/react'
 
 // 한글 폰트 최적화: Noto Sans KR (Google Fonts)
 const notoSansKR = Noto_Sans_KR({
@@ -41,6 +42,7 @@ export default function RootLayout({
         >
           {children}
           <Toaster />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>

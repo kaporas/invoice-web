@@ -29,6 +29,9 @@ const envSchema = z.object({
   SESSION_SECRET: z
     .string()
     .length(32, 'SESSION_SECRET은 정확히 32자여야 합니다'),
+  NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
+  RESEND_API_KEY: z.string().optional(),
+  RESEND_FROM_EMAIL: z.string().email().optional(),
 })
 
 export const env = envSchema.parse({
@@ -40,6 +43,9 @@ export const env = envSchema.parse({
   NOTION_DATABASE_ID: process.env.NOTION_DATABASE_ID,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   SESSION_SECRET: process.env.SESSION_SECRET,
+  NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
 })
 
 // 프로덕션 환경 보안 검증

@@ -174,5 +174,14 @@ export const logger = {
     error?: Error
   ) => {
     log('error', message, context, error)
+    if (
+      error &&
+      process.env.NODE_ENV === 'production' &&
+      process.env.NEXT_PUBLIC_SENTRY_DSN
+    ) {
+      import('@sentry/nextjs')
+        .then(Sentry => Sentry.captureException(error))
+        .catch(() => {})
+    }
   },
 }

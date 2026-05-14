@@ -20,6 +20,9 @@
   - [ ] `ADMIN_PASSWORD` (강력한 비밀번호)
   - [ ] `SESSION_SECRET` (32자 랜덤 문자열)
   - [ ] `NEXT_PUBLIC_BASE_URL` (프로덕션 도메인)
+  - [ ] `NEXT_PUBLIC_SENTRY_DSN` (선택 - 에러 모니터링)
+  - [ ] `RESEND_API_KEY` (선택 - 이메일 발송)
+  - [ ] `RESEND_FROM_EMAIL` (선택 - 발신 이메일 주소)
 
 ### 보안 점검
 
@@ -92,6 +95,7 @@ NODE_ENV=production
 
 ### 기능 테스트
 
+- [ ] 헬스체크 확인: `GET /api/health` → `{ status: 'ok' }` 응답
 - [ ] 관리자 로그인 작동
   - URL: `https://your-domain.vercel.app/admin-login`
   - 비밀번호 입력 후 로그인 성공
