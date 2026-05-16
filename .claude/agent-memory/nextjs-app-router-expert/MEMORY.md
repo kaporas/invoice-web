@@ -1,0 +1,1 @@
+- [Phase 6 링크 공유 시스템 완료 상태](project_phase6_status.md) — Task 016 구현 파일 위치, 컴포넌트 분리 결정 사항 (Server/Client 경계)
